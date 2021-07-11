@@ -281,3 +281,6 @@ defaults:
       share: true
       show_date: true
       related: true
+      toc: true
+      toc_label: "Table of Contents"
+      toc_sticky: true
