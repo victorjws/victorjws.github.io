@@ -95,7 +95,7 @@ analytics:
 # Site Author
 author:
   name             : "서 진원 (Jinwon Seo)"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/bio-photo.jpeg"
   bio              : "성장의 즐거움"
   location         : "Seoul, Republic of Korea"
   email            :
