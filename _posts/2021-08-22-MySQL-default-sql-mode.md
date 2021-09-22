@@ -1,8 +1,10 @@
 ---
 title: "MySQL default SQL Modes"
 date: 2021-08-22 18:06:00 +0900
-categories: MySQL
+categories: Problem-Solving
+tags: MySQL
 ---
+## 들어가며
 회사에서는 `NO_ENGINE_SUBSTITUTION`만을 사용하고 있었는데,
 SQL MODE에 대해 찾아보다가 간혹 datetime 형식에
 '0000-00-00 00:00:00'과 같이 잘못된 데이터가 들어가는 문제를 해결할 수 있는
