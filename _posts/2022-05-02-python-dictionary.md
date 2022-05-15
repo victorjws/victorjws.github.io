@@ -117,7 +117,7 @@ ps  # 중지시켜야 할 process의 PID 확인
 kill -5 $PID  # process에 SIGTRAP 전달
 ```
 
-SIGTRAP signal을 받은 debugger는 실행중이던 python이 멈추고 lldb로 전환된다. 위에서 알게된 `STORE_SUBSCR`의 시작점에 breakpoint를 설정하고 다시 python interpreter를 실행한다.
+SIGTRAP signal을 받은 debugger는 실행중이던 python interpreter가 멈추고 lldb로 전환된다. 위에서 알게된 `STORE_SUBSCR`의 시작점에 breakpoint를 설정하고 다시 python interpreter를 실행한다.
 ```sh
 (lldb) b ceval.c:2366
 (lldb) c
@@ -200,10 +200,14 @@ return insertdict(mp, key, hash, value);  // dictobject.c:1623
 1207   }
 ```
 mask 값은 총 크기의 -1 한 값으로 지정된다. -1을 하는 이유는 2진법으로 치환하면 알기 쉽다.
+
 예를 들어 dk_size = 16일 경우, 2진법으로 표현하면 10000(2)이다.
 여기서 -1을 하게 되면, 01111(2)가 되고, 0000 ~ 1111까지(0 ~ 15) 총 16개의 숫자를 표현할 수 있게된다.
+
 1200번 line을 확인해보면 hash값에 mask를 AND 연산하여 i(index)를 계산한다.
+
 이후 1201번 line의 for문을 통해 dict[i]가 비어있는지 확인하고, 비어있지 않으면 i 값을 다시 계산하여 비어있는 dict[i]를 찾아 저장한다.
+
 python에서는 hash table의 collision 해결방법으로 open addressing을 사용하고 있음을 확인할 수 있다.
 ```c
 849     /* Specialized version for string-only keys */
@@ -236,6 +240,15 @@ python에서는 hash table의 collision 해결방법으로 open addressing을 �
 888     }
 ```
 dict의 조회 시 사용되는 함수 중 하나인 lookdict_unicode의 878 ~ 879와 884 ~ 885 line을 확인해보면 저장된 key와 찾으려는 key가 동일한지 확인하고, 아닐 경우 저장할 때와 동일한 로직으로 index를 다시 계산하는 것을 볼 수 있다.
+
+## 마무리
+여기까지 python에서 hash table을 이용해 dictionary를 어떻게 구현하였는지, collision은 어떤 전략을 사용하여 해결하는지 확인해보았다.
+
+직접 debugging하고, code를 직접 뜯어보니 dictionary 라는 object의 작동 방식에 대한 이해도를 높일 수 있는 유익한 경험이었다.
+
+open source라서 그런지 comments나 documents에 설명이 잘 기록되어 있어 이해하는데 큰 어려움은 없었다. 적절한 comment와 설명이 code의 가독성을 높이고 logic을 이해하는데 얼마나 큰 역할을 하는지 다시 한번 깨달을 수 있었다.
+
+이 외에도 `dictobject.c`의 초반 comments에서 확인할 수 있었던 내용인, dictionary의 두 가지 형태(combined table / split table)에 대해서나, code를 살펴보다 알게되었던 key를 가져올 때도 key의 형태에 따라 다른 함수를 호출하는 등 생각보다 좀 더 복잡한 logic이 존재했다. 이에 대한 부분은 다음에 좀 더 자세히 알아보면 좋을 것 같다.
 
 ## References
 - [CPython Github](https://github.com/python/cpython)
