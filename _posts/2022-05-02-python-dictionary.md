@@ -114,7 +114,7 @@ def foo():
 이를 위해 다른 terminal 창을 띄워 현재 lldb로 실행중인 python을 잠시 멈추고 lldb로 빠져 나와야 한다.
 ```sh
 ps  # 중지시켜야 할 process의 PID 확인
-kill -5 $PID  # process에 SIGTRAP 전달
+kill -SIGTRAP $PID  # process에 SIGTRAP 전달
 ```
 
 SIGTRAP signal을 받은 debugger는 실행중이던 python interpreter가 멈추고 lldb로 전환된다. 위에서 알게된 `STORE_SUBSCR`의 시작점에 breakpoint를 설정하고 다시 python interpreter를 실행한다.
